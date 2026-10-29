@@ -45,14 +45,16 @@ def example1_basic_simulator():
 # 例2: XOR方式での実装
 def example2_xor_parity():
     """例2: XORパリティ検証付きRAID 100"""
-    from raid100_xor import RAID100_XOR, RAMDiskDevice
+    from raid100_xor import RAID100_XOR, StorageDevice
     
     print("\n" + "=" * 50)
     print("例2: XORパリティ検証付きRAID 100")
     print("=" * 50)
     
-    # RAMディスクデバイスを作成（50MBずつ）
-    devices = [RAMDiskDevice(device_id=i, capacity_mb=50) for i in range(12)]
+    # 修正(2026-10-29): raid100_xor には RAMDiskDevice は無く（それは ramdisk_raid100 側の
+    # クラス）、RAID100_XOR が受け取るのは raid100_xor 自身の StorageDevice のため差し替えた
+    # ストレージデバイスを作成（100チャンクずつ）
+    devices = [StorageDevice(device_id=i, capacity=100) for i in range(12)]
     
     # XOR検証付きで実装
     raid100_xor = RAID100_XOR(devices)
