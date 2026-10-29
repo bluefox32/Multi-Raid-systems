@@ -511,8 +511,10 @@ def main():
     ramdisk.benchmark(size_mb=20)
     
     # スナップショット保存
+    # 修正(2026-10-29): 作成環境の絶対パスをやめ、スクリプトと同じフォルダを保存先にする
+    snapshot_path = str(Path(__file__).parent / 'ramdisk_snapshot.pkl')
     print("\n💾 Saving snapshot...")
-    ramdisk.save_snapshot('/home/claude/ramdisk_snapshot.pkl')
+    ramdisk.save_snapshot(snapshot_path)
     
     # デバイス故障シミュレーション
     print("\n💥 Simulating device failure...")
@@ -530,7 +532,7 @@ def main():
     # 新しいRAMディスクを作成してスナップショットから復元
     print("\n🔄 Creating new RAMDisk and loading snapshot...")
     ramdisk2 = RAMDiskRAID100(num_devices=12, device_capacity_mb=50)
-    ramdisk2.load_snapshot('/home/claude/ramdisk_snapshot.pkl')
+    ramdisk2.load_snapshot(snapshot_path)  # 修正(2026-10-29): 保存先と同じパスから復元する
     
     print("\n📂 Files after restoration:")
     for file_info in ramdisk2.list_files():
